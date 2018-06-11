@@ -3,6 +3,7 @@ package com.mongodb.app.springbootmongodb.controller;
 import com.mongodb.app.springbootmongodb.entity.Category;
 import com.mongodb.app.springbootmongodb.request.CreateCategoryRequest;
 import com.mongodb.app.springbootmongodb.request.GetCategoryRequest;
+import com.mongodb.app.springbootmongodb.request.UpdateCategoryRequest;
 import com.mongodb.app.springbootmongodb.response.ErrorResponse;
 import com.mongodb.app.springbootmongodb.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,13 @@ public class ControllerCategory {
         return Optional.ofNullable(categoryService.createCategory(request))
                 .map(callbackJSON -> new ResponseEntity<>(callbackJSON, HttpStatus.CREATED))
                 .orElse(new ResponseEntity<Category>(HttpStatus.BAD_REQUEST));
+    }
+
+    @PostMapping(value = "/update")
+    public ResponseEntity<Category> updateCategory(@Valid @RequestBody UpdateCategoryRequest request){
+        return Optional.ofNullable(categoryService.updateCategory(request))
+            .map(callbackJSON -> new ResponseEntity<>(callbackJSON, HttpStatus.ACCEPTED))
+            .orElse(new ResponseEntity<Category>(HttpStatus.BAD_REQUEST));
     }
 
     @GetMapping(value = "/{categoryId}")
