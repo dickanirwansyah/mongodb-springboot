@@ -2,6 +2,7 @@ package com.mongodb.app.springbootmongodb.controller;
 
 import com.mongodb.app.springbootmongodb.entity.Category;
 import com.mongodb.app.springbootmongodb.request.CreateCategoryRequest;
+import com.mongodb.app.springbootmongodb.request.GetCategoryRequest;
 import com.mongodb.app.springbootmongodb.response.ErrorResponse;
 import com.mongodb.app.springbootmongodb.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,24 @@ public class ControllerCategory {
         return Optional.ofNullable(categoryService.createCategory(request))
                 .map(callbackJSON -> new ResponseEntity<>(callbackJSON, HttpStatus.CREATED))
                 .orElse(new ResponseEntity<Category>(HttpStatus.BAD_REQUEST));
+    }
+
+    @GetMapping(value = "/{categoryId}")
+    public ResponseEntity<Optional<Category>> getDetail(@PathVariable String categoryId){
+        GetCategoryRequest request = GetCategoryRequest
+                .builder()
+                .categoryId(categoryId)
+                .build();
+
+        Optional<Category> category = findId(request);
+        if (!category.isPresent()){
+            return new ResponseEntity<Optional<Category>>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Optional<Category>>(category, HttpStatus.OK);
+    }
+
+    Optional<Category> findId(GetCategoryRequest request){
+        return categoryService.getDetailCategory(request);
     }
 
     /**

@@ -3,11 +3,13 @@ package com.mongodb.app.springbootmongodb.service;
 import com.mongodb.app.springbootmongodb.entity.Category;
 import com.mongodb.app.springbootmongodb.repository.CategoryRepository;
 import com.mongodb.app.springbootmongodb.request.CreateCategoryRequest;
+import com.mongodb.app.springbootmongodb.request.GetCategoryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CategoryServiceImpl implements CategoryService{
@@ -29,6 +31,11 @@ public class CategoryServiceImpl implements CategoryService{
         Category category = newCategory(requestCategory.getNameOfCategory(),
                 requestCategory.getDescriptionOfCategory());
         return categoryRepository.save(category);
+    }
+
+    @Override
+    public Optional<Category> getDetailCategory(GetCategoryRequest requestCategory) {
+        return categoryRepository.findById(requestCategory.getCategoryId());
     }
 
     private Category newCategory(String categoryName, String categoryDescription){
